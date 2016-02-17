@@ -1,0 +1,8 @@
+
+
+Signal = audiorecorder(48000, 16, 1);
+
+record(Signal);
+pause(5);
+
+stop(Signal);

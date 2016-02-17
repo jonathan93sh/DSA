@@ -16,8 +16,11 @@ for n = 1:N
        f_temp(p) = f(n);
        p=p+1;
     
+   elseif(p>= 2)
+       break;
    end
     
+   
 end
  p=1;
 for i = 1:length(f_temp)
