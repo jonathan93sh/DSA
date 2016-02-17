@@ -7,12 +7,12 @@ function x = FSKgenerator(mysymbolseq, fstart, fstop, Tsymbol, fs)
 % Tsymbol = symbol duration in seconds
 % function x = FSKgenerator(mysymbolseq, fstart, fend, Tsymbol, fs)
 
- fstart = 1000; % transmission band frequency start
- fend = 2000; % transmission band frequency end
- Tsymbol = 0.5; % symbol duration in seconds
- fs = 20000; % sampling frequency
+%  fstart = 1000; % transmission band frequency start
+%  fend = 2000; % transmission band frequency end
+%  Tsymbol = 0.5; % symbol duration in seconds
+%  fs = 20000; % sampling frequency
  
-farray = linspace(fstart, fend, 256); % 256 frequencies spread out in band
+farray = linspace(fstart, fstop, 256); % 256 frequencies spread out in band
 A = 1; % amplitude
 n = 0:(round(Tsymbol*fs)-1);
 

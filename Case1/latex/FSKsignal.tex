@@ -1,0 +1,63 @@
+
+% This LaTeX was auto-generated from MATLAB code.
+% To make changes, update the MATLAB code and republish this document.
+
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{color}
+
+\sloppy
+\definecolor{lightgray}{gray}{0.5}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+    
+    
+
+\section*{FSK signal}
+
+\begin{verbatim}
+clear
+
+besked='123 dette er en test: abc';
+
+fstart = 500;
+fstop = 16000;
+fs=10*fstop
+
+Baudrate=2;
+
+Tsymbol=1/Baudrate
+
+x = FSKgenerator(besked, fstart, fstop, Tsymbol, fs);
+
+soundsc(x, fs)
+
+subplot(211), plot(x)
+subplot(212), plot(abs(fft(x)))
+
+figure
+spectrogram(x, hamming(fs*Tsymbol), 0, fs*Tsymbol, fs);
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}
+fs =
+
+      160000
+
+
+Tsymbol =
+
+    0.5000
+
+\end{verbatim} \color{black}
+    
+\includegraphics [width=4in]{FSKsignal_01.eps}
+
+\includegraphics [width=4in]{FSKsignal_02.eps}
+
+
+
+\end{document}
+    
