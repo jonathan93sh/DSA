@@ -1,5 +1,4 @@
-clear;
-% function x = FSKgenerator(mysymbolseq, fstart, fstop, Tsymbol, fs)
+function x = FSKgenerator(mysymbolseq, fstart, fstop, Tsymbol, fs)
 % 
 % mysymbolseq is string of chars - e.g. 'hello world'
 % fs is sampling frequency
