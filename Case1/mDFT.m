@@ -1,6 +1,7 @@
 function [ Xm ] = mDFT( x )
 %MDFT Summary of this function goes here
 %   Detailed explanation goes here
+N=length(x);
 
 Xm=zeros(1, round(N/2));
 for m = 0:round(N/2)-1

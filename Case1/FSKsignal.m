@@ -1,20 +1,20 @@
 %% FSK signal
 clear
 % først skal der oprettes den ønsket besked:
-besked='123 dette er en test: abc';
+besked='123 Dette er en test: abc';
 
 % Her bliver de forskellige parameter sat op
 fstart = 500;
-fstop = 16000;
+fstop = 10000;
 fs=10*fstop
-Baudrate=50;
+Baudrate=2;
 Tsymbol=1/Baudrate
 
 % Her bruger vi FSKgeneratoren til at genere FSK signalet udfra vores
 % parameter.
 x = FSKgenerator(besked, fstart, fstop, Tsymbol, fs);
 N=length(x);
-% Kontrollere at signalet lyder rigtigt.
+% afspiller signalet overhøjtaleren.
 soundsc(x, fs)
 
 % plot af tid og frekvens.
