@@ -1,4 +1,4 @@
-function [ frekvens_seq ] = FSKanalyser( x, fs, Baudrate, fstart, fstop, SNRdB, timeout, splits, fast, N_min_mul )
+function [ frekvens_seq, SNRdB_seq ] = FSKanalyser( x, fs, Baudrate, fstart, fstop, SNRdB, timeout, splits, fast, N_min_mul )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 % clear
@@ -17,9 +17,9 @@ fast=1;
 % x=x';
 
 
-sound(x, fs)
+%sound(x, fs)
 
-fstep=(fstop-fstart)/256
+fstep=(fstop-fstart)/256;
 
 N_min=round(fs/fstep)*N_min_mul;%antal samples der skal være før frekvens opløsningen er stor nok.
 
@@ -33,7 +33,7 @@ Nsymbol = round(fs/Baudrate); % antal sampels par symbol
 cut=round((N/Nsymbol)*splits); 
 
 Ncut=round(Nsymbol/splits);
-figure(1)
+figure
 spectrogram(x, hamming(Ncut), 0, N_min, fs)
 
 
@@ -69,7 +69,7 @@ for n = [1:cut]
         [frekvenser(n,1), frekvenser(n,2)]=max(Spektro(n,:));
         if(frekvenser(n,2)~=1)&&(frekvenser(n,2)~=N_min)
             %frekvenser(n,3)=10*log10(max(Spektro(n,:).^2)/(sum(Spektro(n,:).^2)-max(Spektro(n,:).^2)))
-            frekvenser(n,3)=10*log10(sum(Spektro(n,frekvenser(n,2)-1:frekvenser(n,2)+1).^2)/(sum(Spektro(n,:).^2)-sum(Spektro(n,frekvenser(n,2)-1:frekvenser(n,2)+1).^2)))
+            frekvenser(n,3)=10*log10(sum(Spektro(n,frekvenser(n,2)-1:frekvenser(n,2)+1).^2)/(sum(Spektro(n,:).^2)-sum(Spektro(n,frekvenser(n,2)-1:frekvenser(n,2)+1).^2)));
         else
             frekvenser(n,3)=nan;
         end
@@ -98,6 +98,7 @@ for n = [1:cut-splits]
 end
 
 frekvens_seq=0;
+SNRdB_seq=0;
 point=1;
 timeouts=0;
 for n = [n_start:splits:cut-splits]
@@ -114,14 +115,16 @@ for n = [n_start:splits:cut-splits]
         end
         if(temp_count>=splits-2)
             frekvens_seq(point)=frekvenser(n,2);
-           
+            SNRdB_seq(point)=frekvenser(n,3);
         else
             timeouts=timeouts+1;
             frekvens_seq(point)=-1;
+            SNRdB_seq(point)=frekvenser(n,3);
         end
     else
         timeouts=timeouts+1;
         frekvens_seq(point)=-1;
+        SNRdB_seq(point)=frekvenser(n,3);
     end
 %     if(timeouts == timeout)
 %         break;

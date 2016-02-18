@@ -26,7 +26,7 @@ end
 for i = 1:length(f_temp)
     for n = 1:256
        if(f(i)<=farray(n))
-           a(p)=char(n-1)
+           a(p)=char(n-1);
            p=p+1;
            break;
         end
