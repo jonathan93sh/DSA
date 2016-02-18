@@ -1,27 +1,24 @@
-function [ frekvens_seq ] = FSKanalyser( x, fs, Baudrate, fstart, fstop, SNRdB, timeout, splits, fast, N_min_mul )
+%function [ frekvens_seq ] = FSKanalyser( x, fs, Baudrate, fstart, fstop, Baudrate, SNRdB )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
-% clear
-% N_min_mul = 2;
-% fstart = 500;
-% fstop = 10000;
+clear
+fstart = 500;
+fstop = 10000;
 fast=1;
-% Baudrate=2;
-% SNRdB=10;
-% timeout=5;
-% 
-% splits=5;
+Baudrate=2;
+SNRdB=10;
+timeout=5;
+fstep=(fstop-fstart)/256
+splits=5;
 
-% load('record.mat')
-% 
-% x=x';
+load('record.mat')
+
+x=x';
 
 
 sound(x, fs)
 
-fstep=(fstop-fstart)/256
-
-N_min=round(fs/fstep)*N_min_mul;%antal samples der skal være før frekvens opløsningen er stor nok.
+N_min=round(fs/fstep)*2;%antal samples der skal være før frekvens opløsningen er stor nok.
 
 N=length(x);
 
@@ -35,7 +32,8 @@ cut=round((N/Nsymbol)*splits);
 Ncut=round(Nsymbol/splits);
 figure(1)
 spectrogram(x, hamming(Ncut), 0, N_min, fs)
-
+figure(2)
+spectrogram(x, hamming(Ncut), 0, N_min*2, fs)
 
 if(Ncut<N_min)
     disp('Ncut er for lille, skal bruge zero padding !!!');
@@ -132,5 +130,5 @@ end
     
     
     
-end
+%end
 
