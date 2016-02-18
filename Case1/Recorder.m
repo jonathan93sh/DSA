@@ -27,8 +27,15 @@ SNRdB=10;
 timeout=1;
 splits=5;
 
-frekvenser=FSKanalyser(x',fs,Baudrate,fstart,fstop,SNRdB,timeout,splits,1,2);
+[frekvenser,SNRdB_seq]=FSKanalyser(x',fs,Baudrate,fstart,fstop,SNRdB,timeout,splits,1,2);
 
 besked=FSKdekoder( frekvenser, fstart, fstop );
+
+figure
+plot(SNRdB_seq)
+title('SNR i dB');
+xlabel('tegn');
+ylabel('dB');
+
 
 disp(besked);
