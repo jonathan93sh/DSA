@@ -53,10 +53,10 @@ for n = [1:cut]
         break;
     end
     %Spektro(n,:)=
-    disp(n);
+    %disp((n/cut)*100);
     if(fast)
-        if(zero)
-            Spektro(n,:)=mDFT(hamming(N_min)'.*[x(Ncut*(n-1)+1:(Ncut*(n-1))+N_min), zeros(1, N_min-Ncut)]);
+        if(zeropad)
+            Spektro(n,:)=mDFT(hamming(N_min)'.*[x(Ncut*(n-1)+1:Ncut*n), zeros(1, N_min-Ncut)]);
         else
             Spektro(n,:)=mDFT(hamming(N_min)'.*x(Ncut*(n-1)+1:(Ncut*(n-1))+N_min));
         end
@@ -82,7 +82,7 @@ for n = [1:cut]
 end
 
 
-n_start=0; % find start punkt for signalet.
+n_start=1; % find start punkt for signalet.
 
 for n = [1:cut-splits]
     temp_count=1;
@@ -100,7 +100,7 @@ for n = [1:cut-splits]
         end
     end
 end
-
+disp(n_start);
 frekvens_seq=0;
 SNRdB_seq=0;
 point=1;
@@ -113,7 +113,7 @@ for n = [n_start:splits:cut-splits]
     
     if(frekvenser(temp_n,3)>=SNRdB)
         for m=[0:splits-1]
-            if(frekvenser(temp_n,2)==frekvenser(n+m,2))&&(frekvenser(n+m,3)>=SNRdB)
+            if(frekvenser(temp_n,2)==frekvenser(n+m,2))%%&&(frekvenser(n+m,3)>=SNRdB)
                 temp_count = temp_count+1;
             end
         end

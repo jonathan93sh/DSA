@@ -17,7 +17,7 @@ for n = 1:N
        p=p+1;
     
    elseif(p>= 2)
-       break;
+       %break;
    end
     
    
