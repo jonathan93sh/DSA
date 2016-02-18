@@ -1,10 +1,10 @@
-%function [ a ] = FSK dekoder( f, fstart, fend )
+function [ a ] = FSKdekoder( f, fstart, fstop )
 %FSK DEKODER Summary of this function goes here
 %   Detailed explanation goes here
 a=' ';
-f = [3350 3400 3450 3500 3550];
-fstart = 500;
-fstop = 16000;
+% f = [3350 3400 3450 3500 3550];
+% fstart = 500;
+% fstop = 16000;
 
 N=length(f);
 farray = linspace(fstart, fstop, 256);
@@ -31,6 +31,7 @@ for i = 1:length(f_temp)
            break;
         end
     end
+end
 end
 
 
