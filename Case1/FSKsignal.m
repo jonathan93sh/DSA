@@ -4,11 +4,11 @@ clear
 besked='123 Dette er en test: abc';
 
 % Her bliver de forskellige parameter sat op
-fstart = 500;
-fstop = 16000;
-fs=10*fstop
-Baudrate=10;
-Tsymbol=1/Baudrate
+fstart = 800;
+fstop = 10000;
+fs=10*fstop;
+Baudrate=2;
+Tsymbol=1/Baudrate;
 
 % Her bruger vi FSKgeneratoren til at genere FSK signalet udfra vores
 % parameter.
@@ -26,7 +26,7 @@ subplot(212), plot([0:N-1]*fs/N,abs(fft(x))), xlabel('frekvens( Hz )');
 % over tiden.
 
 figure
-spectrogram(x, hamming(fs*Tsymbol), 0, fs*Tsymbol, fs) % WINDOW = rectwin(500), NOVERLAP = 0, NFFT = 500 (no zero-padding), Fs = 20000
+spectrogram(x, hamming(round(fs*Tsymbol)), 0, round(fs*Tsymbol), fs) % WINDOW = rectwin(500), NOVERLAP = 0, NFFT = 500 (no zero-padding), Fs = 20000
 
 % gemmer signalet så det kan sendes til dekoderen.
 
