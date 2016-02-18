@@ -5,9 +5,9 @@ besked='123 Dette er en test: abc';
 
 % Her bliver de forskellige parameter sat op
 fstart = 500;
-fstop = 10000;
+fstop = 16000;
 fs=10*fstop
-Baudrate=2;
+Baudrate=10;
 Tsymbol=1/Baudrate
 
 % Her bruger vi FSKgeneratoren til at genere FSK signalet udfra vores

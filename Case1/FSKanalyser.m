@@ -36,10 +36,10 @@ Ncut=round(Nsymbol/splits);
 figure
 spectrogram(x, hamming(Ncut), 0, N_min, fs)
 
-
+zeropad=0;
 if(Ncut<N_min)
     disp('Ncut er for lille, skal bruge zero padding !!!');
-    return;
+    zeropad=1;
 end
 
 if(fast)
@@ -55,7 +55,11 @@ for n = [1:cut]
     %Spektro(n,:)=
     disp(n);
     if(fast)
-        Spektro(n,:)=mDFT(hamming(N_min)'.*x(Ncut*(n-1)+1:(Ncut*(n-1))+N_min));
+        if(zero)
+            Spektro(n,:)=mDFT(hamming(N_min)'.*[x(Ncut*(n-1)+1:(Ncut*(n-1))+N_min), zeros(1, N_min-Ncut)]);
+        else
+            Spektro(n,:)=mDFT(hamming(N_min)'.*x(Ncut*(n-1)+1:(Ncut*(n-1))+N_min));
+        end
     else
         Spektro(n,:)=mDFT(hamming(Ncut)'.*x(Ncut*(n-1)+1:Ncut*n));
     end
