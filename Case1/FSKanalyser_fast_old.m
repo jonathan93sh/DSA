@@ -1,4 +1,4 @@
-function [ frekvens_seq, SNRdB_seq ] = FSKanalyser( x, fs, Baudrate, fstart, fstop, SNRdB, timeout, splits, fast, N_min_mul )
+function [ frekvens_seq, SNRdB_seq ] = FSKanalyser( x, fs, Baudrate, fstart, fstop, SNRdB, timeout, splits, workers, N_min_mul )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 % clear
@@ -42,27 +42,22 @@ if(Ncut<N_min)
     zeropad=1;
 end
 
-if(fast)
-    Spektro=zeros(cut, round(N_min/2));
-else
-    Spektro=zeros(cut, round(Ncut/2));
-end
+
+Spektro=zeros(cut, round(N_min/2));
+
     
 for n = [1:cut]
     if(Ncut*n>N)
         break;
     end
     %Spektro(n,:)=
-    disp(n);
-    if(fast)
-        if(zeropad)
-            Spektro(n,:)=mDFT(hamming(N_min)'.*[x(Ncut*(n-1)+1:Ncut*n), zeros(1, N_min-Ncut)]);
-        else
-            Spektro(n,:)=mDFT(hamming(N_min)'.*x(Ncut*(n-1)+1:(Ncut*(n-1))+N_min));
-        end
+    disp((n/cut)*100);
+    if(zeropad)
+        Spektro(n,:)=mDFT_fast(hamming(N_min)'.*[x(Ncut*(n-1)+1:(Ncut*(n-1))+N_min), zeros(1, N_min-Ncut)], fstart, fstop, fs, workers, 1);
     else
-        Spektro(n,:)=mDFT(hamming(Ncut)'.*x(Ncut*(n-1)+1:Ncut*n));
+        Spektro(n,:)=mDFT_fast(hamming(N_min)'.*x(Ncut*(n-1)+1:(Ncut*(n-1))+N_min), fstart, fstop, fs, workers, 1);
     end
+
 end
 
 frekvenser=zeros(cut, 3);
@@ -100,7 +95,7 @@ for n = [1:cut-splits]
         end
     end
 end
-disp(n_start);
+
 frekvens_seq=0;
 SNRdB_seq=0;
 point=1;

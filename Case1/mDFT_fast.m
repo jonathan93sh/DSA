@@ -7,7 +7,7 @@ if isempty(poolobj)
     parpool('local',workers)
     poolsize = workers;
 else
-    poolsize = poolobj.NumWorkers
+    poolsize = poolobj.NumWorkers;
 end
 
 N=length(x);
@@ -17,7 +17,7 @@ N=length(x);
 Xm=zeros(1, round(N/2));
 if(cut)
     n_start=round(N*(fstart/fs));
-    n_stop=round(N*(fstart/fs));
+    n_stop=round(N*(fstop/fs));
     if(round(N/2)<n_stop)
         disp('fejl fs er for lille');
         return;

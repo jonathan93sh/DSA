@@ -1,23 +1,8 @@
-function [ frekvens_seq, SNRdB_seq ] = FSKanalyser( x, fs, Baudrate, fstart, fstop, SNRdB, timeout, splits, workers, N_min_mul )
+function [ frekvens_seq, SNRdB_seq ] = FSKanalyser_fast( x, fs, Baudrate, fstart, fstop, splits, workers, N_min_mul )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
-% clear
-% N_min_mul = 2;
-% fstart = 500;
-% fstop = 10000;
+
 fast=1;
-% Baudrate=2;
-% SNRdB=10;
-% timeout=5;
-% 
-% splits=5;
-
-% load('record.mat')
-% 
-% x=x';
-
-
-%sound(x, fs)
 
 fstep=(fstop-fstart)/256;
 
@@ -33,35 +18,41 @@ Nsymbol = round(fs/Baudrate); % antal sampels par symbol
 cut=round((N/Nsymbol)*splits); 
 
 Ncut=round(Nsymbol/splits);
-figure
+
 spectrogram(x, hamming(Ncut), 0, N_min, fs)
 
 zeropad=0;
 if(Ncut<N_min)
-    disp('Ncut er for lille, skal bruge zero padding !!!');
+    disp('Ncut er for lille, bruger zero padding !!!');
     zeropad=1;
 end
 
-
-Spektro=zeros(cut, round(N_min/2));
-
+if(fast)
+    Spektro=zeros(cut, round(N_min/2));
+else
+    Spektro=zeros(cut, round(Ncut/2));
+end
     
 for n = [1:cut]
     if(Ncut*n>N)
         break;
     end
     %Spektro(n,:)=
-    disp(n);
-    if(zero)
-        Spektro(n,:)=mDFT_fast(hamming(N_min)'.*[x(Ncut*(n-1)+1:(Ncut*(n-1))+N_min), zeros(1, N_min-Ncut)], fstart, fstop, fs, 2, workers, 1);
+    %disp((n/cut)*100);
+    if(fast)
+        if(zeropad)
+            Spektro(n,:)=mDFT_fast(hamming(N_min)'.*[x(Ncut*(n-1)+1:Ncut*n), zeros(1, N_min-Ncut)], fstart, fstop, fs, workers, 1);
+        else
+            Spektro(n,:)=mDFT_fast(hamming(N_min)'.*x(Ncut*(n-1)+1:(Ncut*(n-1))+N_min), fstart, fstop, fs, workers, 1);
+        end
     else
-        Spektro(n,:)=mDFT_fast(hamming(N_min)'.*x(Ncut*(n-1)+1:(Ncut*(n-1))+N_min), fstart, fstop, fs, 2, workers, 1);
+        Spektro(n,:)=mDFT(hamming(Ncut)'.*x(Ncut*(n-1)+1:Ncut*n));
     end
-
 end
 
 frekvenser=zeros(cut, 3);
 
+save('test.mat','Spektro');
 
 for n = [1:cut]
     if(fast)
@@ -75,15 +66,16 @@ for n = [1:cut]
         frekvenser(n,2)=frekvenser(n,2)*fs/N_min;
     end
 end
+SNRdB_min_value=min(frekvenser(:,3));
+SNRdB_min=(min(frekvenser(:,3))+max(frekvenser(:,3)))/3;
 
-
-n_start=0; % find start punkt for signalet.
+n_start=1; % find start punkt for signalet.
 
 for n = [1:cut-splits]
     temp_count=1;
-    if(frekvenser(n,3)>=SNRdB)
+    if(frekvenser(n,3)>=SNRdB_min)
         for m=[1:splits-1]
-            if(frekvenser(n,2)==frekvenser(n+m,2))&&(frekvenser(n+m,3)>=SNRdB)
+            if(frekvenser(n,2)==frekvenser(n+m,2))&&(frekvenser(n+m,3)>=SNRdB_min)
                 temp_count = temp_count+1;
             else
                 break;
@@ -95,41 +87,38 @@ for n = [1:cut-splits]
         end
     end
 end
-
+disp(n_start);
 frekvens_seq=0;
 SNRdB_seq=0;
 point=1;
-timeouts=0;
+
 for n = [n_start:splits:cut-splits]
     
-    temp_count=0;
-    [ans,temp_n]=max(frekvenser(n:n+splits-1,3));
-    temp_n=temp_n+n-1;
+    frq=zeros(4, splits);
     
-    if(frekvenser(temp_n,3)>=SNRdB)
-        for m=[0:splits-1]
-            if(frekvenser(temp_n,2)==frekvenser(n+m,2))&&(frekvenser(n+m,3)>=SNRdB)
-                temp_count = temp_count+1;
+    for n2 = 1:splits
+        frq(3,:)=SNRdB_min_value; 
+    end
+    
+    for n2 = 1:splits
+        for n3 = 1:splits
+            if(frq(1,n3)==0)||(frq(1,n3)==frekvenser(n+n2,2))
+                if(frekvenser(n+n2,3)>frq(3,n3))
+                    frq(3,n3)=frekvenser(n+n2,3);
+                end
+                frq(1,n3)=frekvenser(n+n2,2);
+                frq(2,n3)=frq(2,n3)+frekvenser(n+n2,3);
+                frq(4,n3)=frq(4,n3)+1;
+                break;
             end
         end
-        if(temp_count>=splits-2)
-            frekvens_seq(point)=frekvenser(n,2);
-            SNRdB_seq(point)=frekvenser(n,3);
-        else
-            timeouts=timeouts+1;
-            frekvens_seq(point)=-1;
-            SNRdB_seq(point)=frekvenser(n,3);
-        end
-    else
-        timeouts=timeouts+1;
-        frekvens_seq(point)=-1;
-        SNRdB_seq(point)=frekvenser(n,3);
     end
-%     if(timeouts == timeout)
-%         break;
-%     end
-    point = point + 1;
-    
+    [ans, temp_n]=max(frq(2,:));
+    if(frq(4,temp_n)>=splits-2)&&(frq(3, temp_n)>SNRdB_min)
+        frekvens_seq(point)=frq(1, temp_n);
+        SNRdB_seq(point)=frq(3, temp_n);
+        point = point + 1;
+    end
 end
     
     
