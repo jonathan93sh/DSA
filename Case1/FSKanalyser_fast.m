@@ -13,47 +13,42 @@ N=length(x);
 Nsymbol = round(fs/Baudrate); % antal sampels par symbol
 
 % hvor mange dele den vil splitte signal op i før den køre DFT. grund til 
-% at den får 5 gange så mange signaler er for at undgå overlapping af 
+% at den får et 'x' antal gange så mange signaler er for at undgå overlapping af 
 % signal og fjerne de cuts som har overlapping i sig.
 cut=round((N/Nsymbol)*splits); 
 
-Ncut=round(Nsymbol/splits);
+Ncut=round(Nsymbol/splits); % antal samples par cut.
 
-spectrogram(x, hamming(Ncut), 0, N_min, fs)
+spectrogram(x, hamming(Ncut), 0, N_min, fs); % laver et spectrogram udfra de indstillinger vi bruger til at analysere signalet.
 
+% Tjekker om der skal bruges zeropadding for at opnå en god nok frekvens
+% opløsning.
 zeropad=0;
-if(Ncut<N_min)
+if(Ncut<N_min) 
     disp('Ncut er for lille, bruger zero padding !!!');
     zeropad=1;
 end
 
-if(fast)
-    Spektro=zeros(cut, round(N_min/2));
-else
-    Spektro=zeros(cut, round(Ncut/2));
-end
-    
+% den første løkke laver DFT på de små bidder af signalet.
+Spektro=zeros(cut, round(N_min/2));    
 for n = [1:cut]
     if(Ncut*n>N)
         break;
     end
-    %Spektro(n,:)=
+
     %disp((n/cut)*100);
-    if(fast)
-        if(zeropad)
-            Spektro(n,:)=mDFT_fast(hamming(N_min)'.*[x(Ncut*(n-1)+1:Ncut*n), zeros(1, N_min-Ncut)], fstart, fstop, fs, workers, 1);
-        else
-            Spektro(n,:)=mDFT_fast(hamming(N_min)'.*x(Ncut*(n-1)+1:(Ncut*(n-1))+N_min), fstart, fstop, fs, workers, 1);
-        end
+
+    if(zeropad)
+        Spektro(n,:)=mDFT_fast(hamming(N_min)'.*[x(Ncut*(n-1)+1:Ncut*n), zeros(1, N_min-Ncut)], fstart, fstop, fs, workers, 1);
     else
-        Spektro(n,:)=mDFT(hamming(Ncut)'.*x(Ncut*(n-1)+1:Ncut*n));
+        Spektro(n,:)=mDFT_fast(hamming(N_min)'.*x(Ncut*(n-1)+1:(Ncut*(n-1))+N_min), fstart, fstop, fs, workers, 1);
     end
+
 end
 
+% her efter finder den den bin med den største amplitude, og udregner SNRdB
+% og hvilken frekvens der tilhøre til den bin.
 frekvenser=zeros(cut, 3);
-
-save('test.mat','Spektro');
-
 for n = [1:cut]
     if(fast)
         [frekvenser(n,1), frekvenser(n,2)]=max(Spektro(n,:));
@@ -66,11 +61,11 @@ for n = [1:cut]
         frekvenser(n,2)=frekvenser(n,2)*fs/N_min;
     end
 end
+
+% Her finder den så start punktet for transmissionen.
 SNRdB_min_value=min(frekvenser(:,3));
 SNRdB_min=(min(frekvenser(:,3))+max(frekvenser(:,3)))/3;
-
-n_start=1; % find start punkt for signalet.
-
+n_start=1;
 for n = [1:cut-splits]
     temp_count=1;
     if(frekvenser(n,3)>=SNRdB_min)
@@ -87,11 +82,12 @@ for n = [1:cut-splits]
         end
     end
 end
-disp(n_start);
+
+% her finder den de frekvenser der tilhøre de forskellige symboler der er i
+% transmissionen. Og SNR for hvert tegn.
 frekvens_seq=0;
 SNRdB_seq=0;
 point=1;
-
 for n = [n_start:splits:cut-splits]
     
     frq=zeros(4, splits);

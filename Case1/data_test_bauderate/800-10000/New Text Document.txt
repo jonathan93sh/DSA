@@ -1,0 +1,29 @@
+1 Bauderate : procent 100%
+1 Bauderate : SNRdB: avg= 28.2212dB max= 38.2274dB min= 20.5664dB
+Ncut er for lille, bruger zero padding !!!
+6 Bauderate : procent 28.5714%
+6 Bauderate : SNRdB: avg= 8.8366dB max= 10.5732dB min= 7.2865dB
+Ncut er for lille, bruger zero padding !!!
+11 Bauderate : procent 28.5714%
+11 Bauderate : SNRdB: avg= 2.4473dB max= 3.1928dB min= 1.7758dB
+Ncut er for lille, bruger zero padding !!!
+16 Bauderate : procent 0%
+16 Bauderate : SNRdB: avg= 0dB max= 0dB min= 0dB
+Ncut er for lille, bruger zero padding !!!
+21 Bauderate : procent 0%
+21 Bauderate : SNRdB: avg= 0dB max= 0dB min= 0dB
+Ncut er for lille, bruger zero padding !!!
+26 Bauderate : procent 0%
+26 Bauderate : SNRdB: avg= 0dB max= 0dB min= 0dB
+Ncut er for lille, bruger zero padding !!!
+31 Bauderate : procent 0%
+31 Bauderate : SNRdB: avg= 0dB max= 0dB min= 0dB
+Ncut er for lille, bruger zero padding !!!
+36 Bauderate : procent 0%
+36 Bauderate : SNRdB: avg= 0dB max= 0dB min= 0dB
+Ncut er for lille, bruger zero padding !!!
+41 Bauderate : procent 0%
+41 Bauderate : SNRdB: avg= 0dB max= 0dB min= 0dB
+Ncut er for lille, bruger zero padding !!!
+46 Bauderate : procent 0%
+46 Bauderate : SNRdB: avg= 0dB max= 0dB min= 0dB
