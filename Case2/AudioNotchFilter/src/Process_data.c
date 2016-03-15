@@ -1,10 +1,26 @@
 #include "Talkthrough.h"
 
 // Modify and insert your notch filter here!!!!
+
+int x1_, x2_ = 0;
+int y1_, y2_ = 0;
+
+//int b[] = {(short)(1.9895f*(2^3)), 1};
+//short a[] = {(short)(1.9875f*(2^3)), (short)(0.9980f*(2^3))};
+
 short myVolume(short x)
 {
-	// Attenuation
-	return x>>2;
+
+	//short y = x<<2 - 19895*x_[0] + x_[1] + 19875*y_[0] - 9980*y_[1];
+	int y = ((int)x<<14) + (-32595*x1_) + (x2_<<14) + (32269*y1_) + (-16058*y2_);
+	y2_ = y1_;
+	x2_ = x1_;
+
+	y1_ = y>>14;
+
+	x1_ = x;
+
+	return (short)(y>>14);
 }
 
 //--------------------------------------------------------------------------//
@@ -22,6 +38,8 @@ short myVolume(short x)
 void Process_Data(void)
 {
 	short xn, yn;
+
+
 
 	// FlagAMode is changed by using pushbutton	SW4 on board..
 	switch (FlagAMode) {

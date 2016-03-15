@@ -41,6 +41,9 @@ endif
 ifneq ($(strip $(CXX_DEPS)),)
 -include $(CXX_DEPS)
 endif
+ifneq ($(strip $(C_UPPER_DEPS)),)
+-include $(C_UPPER_DEPS)
+endif
 endif
 
 -include ../makefile.defs
@@ -49,23 +52,54 @@ endif
 LINKER_LOG_OUTPUTS += \
 linker_log.xml \
 
+OBJS := $(SRC_OBJS)
+# Quote makefile variable : OBJS 
+OBJS := $(subst \ ,@, $(OBJS))
+OBJS := $(foreach var, $(OBJS), "$(subst @, ,$(var))")
+# Quote makefile variable : C++_DEPS 
+C++_DEPS := $(subst \ ,@, $(C++_DEPS))
+C++_DEPS := $(foreach var, $(C++_DEPS), "$(subst @, ,$(var))")
+# Quote makefile variable : C_DEPS 
+C_DEPS := $(subst \ ,@, $(C_DEPS))
+C_DEPS := $(foreach var, $(C_DEPS), "$(subst @, ,$(var))")
+# Quote makefile variable : ASM_DEPS 
+ASM_DEPS := $(subst \ ,@, $(ASM_DEPS))
+ASM_DEPS := $(foreach var, $(ASM_DEPS), "$(subst @, ,$(var))")
+# Quote makefile variable : CC_DEPS 
+CC_DEPS := $(subst \ ,@, $(CC_DEPS))
+CC_DEPS := $(foreach var, $(CC_DEPS), "$(subst @, ,$(var))")
+# Quote makefile variable : DSP_DEPS 
+DSP_DEPS := $(subst \ ,@, $(DSP_DEPS))
+DSP_DEPS := $(foreach var, $(DSP_DEPS), "$(subst @, ,$(var))")
+# Quote makefile variable : CPP_DEPS 
+CPP_DEPS := $(subst \ ,@, $(CPP_DEPS))
+CPP_DEPS := $(foreach var, $(CPP_DEPS), "$(subst @, ,$(var))")
+# Quote makefile variable : S_DEPS 
+S_DEPS := $(subst \ ,@, $(S_DEPS))
+S_DEPS := $(foreach var, $(S_DEPS), "$(subst @, ,$(var))")
+# Quote makefile variable : CXX_DEPS 
+CXX_DEPS := $(subst \ ,@, $(CXX_DEPS))
+CXX_DEPS := $(foreach var, $(CXX_DEPS), "$(subst @, ,$(var))")
+# Quote makefile variable : C_UPPER_DEPS 
+C_UPPER_DEPS := $(subst \ ,@, $(C_UPPER_DEPS))
+C_UPPER_DEPS := $(foreach var, $(C_UPPER_DEPS), "$(subst @, ,$(var))")
 
 # All Target
 all: AudioNotchFilter.dxe
 
 # Tool invocations
-AudioNotchFilter.dxe: $(OBJS) $(LDF_SRCS)
+AudioNotchFilter.dxe: $(LDF_SRCS) $(SRC_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: CrossCore Blackfin Linker'
-	ccblkfn.exe -proc ADSP-BF533 -si-revision 0.6 -TC:/Users/kbe/Dropbox/ETISB/firstWeeks/AudioNotchFilter/system/startup_ldf/app.ldf -no-mem -LC:/Users/kbe/Dropbox/ETISB/firstWeeks/AudioNotchFilter/Debug/system/startup_ldf -flags-link -MDDEBUG -add-debug-libpaths -o AudioNotchFilter.dxe $(OBJS) $(LDF_SRCS)  -flags-link -od,.\.
+	ccblkfn.exe -proc ADSP-BF533 -si-revision 0.6 -TC:/Users/Studie-PC/Documents/GitHub/DSA/Case2/AudioNotchFilter/system/startup_ldf/app.ldf -no-mem -LC:/Users/Studie-PC/Documents/GitHub/DSA/Case2/AudioNotchFilter/Debug/system/startup_ldf -flags-link -MDDEBUG,-MDCORE0 -add-debug-libpaths -o AudioNotchFilter.dxe $(SRC_OBJS) $(LDF_SRCS)  -flags-link -od,.\.
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-linker_log.xml: AudioNotchFilter.dxe $(OBJS) $(LDF_SRCS)
+linker_log.xml: AudioNotchFilter.dxe $(LDF_SRCS) $(SRC_OBJS)
 
 # Other Targets
 clean:
-	-$(RM) $(C++_DEPS)$(OBJS)$(C_DEPS)$(ASM_DEPS)$(CC_DEPS)$(DSP_DEPS)$(DXE)$(CPP_DEPS)$(LINKER_LOG_OUTPUTS)$(S_DEPS)$(CXX_DEPS) AudioNotchFilter.dxe
+	-$(RM) $(C++_DEPS)$(OBJS)$(C_DEPS)$(ASM_DEPS)$(CC_DEPS)$(DSP_DEPS)$(DXE)$(CPP_DEPS)$(LINKER_LOG_OUTPUTS)$(S_DEPS)$(CXX_DEPS)$(C_UPPER_DEPS) AudioNotchFilter.dxe
 	-@echo ' '
 
 .PHONY: all clean dependents
