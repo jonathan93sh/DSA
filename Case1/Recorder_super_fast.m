@@ -91,7 +91,7 @@ fstart=800;
 fstop=10000;
 SNRdB_min=7;
 timeout=1;
-splits=3;
+splits=5;
 
 plot_x=10; 
 plot_y=10;
@@ -103,6 +103,7 @@ list=[1 2 3 4 5 7 10 15 20];
 SNRdB=zeros(4,length(list));
 count_2=1;
 for n=list
+    %% test
     close all;
     SNRdB(1,count_2)=n;
     load(['data/record_' num2str(n) '.mat'])
@@ -161,7 +162,7 @@ for n=list
     SNRdB(3,count_2)=SNRdB_max;
     SNRdB(4,count_2)=SNRdB_min;
     disp([num2str(n) 'm : SNRdB: avg= ' num2str(SNRdB_avg) 'dB max= ' num2str(SNRdB_max) 'dB min= ' num2str(SNRdB_min) 'dB']);
-
+    %% test
     count_2=count_2+1;
 end
 
