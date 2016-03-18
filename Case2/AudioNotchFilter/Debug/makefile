@@ -91,7 +91,7 @@ all: AudioNotchFilter.dxe
 AudioNotchFilter.dxe: $(LDF_SRCS) $(SRC_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: CrossCore Blackfin Linker'
-	ccblkfn.exe -proc ADSP-BF533 -si-revision 0.6 -TC:/Users/Studie-PC/Documents/GitHub/DSA/Case2/AudioNotchFilter/system/startup_ldf/app.ldf -no-mem -LC:/Users/Studie-PC/Documents/GitHub/DSA/Case2/AudioNotchFilter/Debug/system/startup_ldf -flags-link -MDDEBUG,-MDCORE0 -add-debug-libpaths -o AudioNotchFilter.dxe $(SRC_OBJS) $(LDF_SRCS)  -flags-link -od,.\.
+	ccblkfn.exe -proc ADSP-BF533 -si-revision 0.6 -TC:/Users/jonathan/Documents/GitHub/DSA/Case2/AudioNotchFilter/system/startup_ldf/app.ldf -no-mem -LC:/Users/jonathan/Documents/GitHub/DSA/Case2/AudioNotchFilter/Debug/system/startup_ldf -flags-link -MDDEBUG,-MDCORE0 -add-debug-libpaths -o AudioNotchFilter.dxe $(SRC_OBJS) $(LDF_SRCS)  -flags-link -od,.\.
 	@echo 'Finished building target: $@'
 	@echo ' '
 

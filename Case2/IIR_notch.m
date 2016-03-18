@@ -1,3 +1,4 @@
+
 clear
 clc
 close all
@@ -10,13 +11,17 @@ omega=f0/fs*2*pi
 z0=1*exp(j*omega)
 z1=z0'
 
-p0=0.999*exp(j*omega)
+p0=0.99*exp(j*omega)
 p1=p0'
 
 omega_=linspace(-pi, pi, 10000);
 
 B=[1, -(z1+z0), z1*z0]
 A=[1, -(p0+p1), p1*p0]
+
+round(B*2^14)
+round(A*2^14)
+
 
 H=((exp(j*omega_)-z0).*(exp(j*omega_)-z1))./((exp(j*omega_)-p0).*(exp(j*omega_)-p1));
 figure
