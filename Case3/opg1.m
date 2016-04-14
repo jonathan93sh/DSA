@@ -20,23 +20,16 @@ Svar_ulod = std(data_ulod); %32.2977
 var_ulod = Svar_ulod^2; %1043.1
 
 %% Histogram plots
-norm_med = normpdf(data_mlod,x_avg_mlod,Svar_mlod);
-norm_uden = normpdf(data_ulod,x_avg_ulod,Svar_ulod);
-x_akse = [-3:1:3];
-
 figure
-histogram(data_mlod)
+histfit(data_mlod)
 title('Histogram for data med lod');
-hold on
-plot(x_akse,norm_med);
 
 figure
-histogram(data_ulod)
+histfit(data_ulod)
 title('Histogram for data uden lod');
-hold on
 
-
-% de er tilnærmelsesvist normalt fordelete.
+% de er tilnærmelsesvist normalt fordelete. Da de næsten følger
+% normalfordelings kurven. 
 % og spredningen passer nogenlunde med hitogrammet.
 
 %% Effekspektrumsstrøj
