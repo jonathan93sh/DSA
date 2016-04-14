@@ -1,5 +1,8 @@
 %%dsa case 3 opg 1
-load('vejecelle_data.mat'); % 1kg ved 1020 -- uden 1020>
+close all
+clear
+clc
+load('vejecelle_data.mat'); % 1kg under 1020 -- uden lod over 1020
 data=vejecelle_data;
 clear vejecelle_data;
 data_mlod = data(100:900);
@@ -49,9 +52,17 @@ semilogx([0:N-1]*ts, 20*log10(abs(fft(data_ulod(1:N)))));
 grid on
 title('FFT plot uden lod');
 
+figure
+spectrogram(data_mlod,hamming(50),0,5000,fs);
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 20 10])
+
+figure
+spectrogram(data_ulod,hamming(50),0,5000,fs);
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 20 10])
+
 %eftersom amplituden ikke varierer meget over frekvensspektrummet kan det
 %siges, at der er hvid støj, da hvid støj per definition er at:
-%Hvis støj dækker alle frekvenser lige kraftigt => der inden for det synlige
+%Hvid støj dækker alle frekvenser lige kraftigt => der inden for det synlige
 %spektrum er der lige meget energi i en given båndbredde uanset hvor den båndbredde ligger.  
 
 %% bit værdi
