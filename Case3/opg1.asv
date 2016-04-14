@@ -22,7 +22,7 @@ var_ulod = Svar_ulod^2; %1043.1
 %% Histogram plots
 norm_med = normpdf(data_mlod,x_avg_mlod,Svar_mlod);
 norm_uden = normpdf(data_ulod,x_avg_ulod,Svar_ulod);
-x_akse = [-3:1:3];
+x_akse = [0:1:N-1];
 
 figure
 histogram(data_mlod)
