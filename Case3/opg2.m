@@ -23,13 +23,14 @@ plot(data_ulod)
 plot(data_ulod_10)
 plot(data_ulod_50)
 plot(data_ulod_100)
+ylim([1300,1500])
 
 
 avg_meas=[mean(data_ulod), mean(data_ulod_10(11:end-11)), mean(data_ulod_50(51:end-51)), mean(data_ulod_100(101:end-101))];
 rms_meas=[std(data_ulod), std(data_ulod_10(11:end-11)), std(data_ulod_50(51:end-51)), std(data_ulod_100(101:end-101))];
 var_meas=rms_meas.^2;
 
-var_calc=var_meas(1)./[1:100]
+var_calc=var_meas(1)./[1:100];
 
 figure
 semilogy([1:100],var_calc)
@@ -45,17 +46,17 @@ M=floor(0.1/Ts) % runder ned da ellers vil kravet ikke være opfyldt, dog
                 % går tallet lige op så det er ikke noget problem men for 
                 % god ordens skyld bruges floor alligevel.
 
-h_M=ones(1,M)/M
+h_M=ones(1,M)/M;
 
 data_ulod_M=conv(data_ulod,h_M);
 
-mean_M=mean(data_ulod_M(M:end-M));
+mean_M=mean(data_ulod_M(M:end-M))
 
-var_calc_M=var_meas(1)/M;
-rms_calc_M=sqrt(var_calc_M);
+var_calc_M=var_meas(1)/M
+rms_calc_M=sqrt(var_calc_M)
 
-rms_M=std(data_ulod_M(M:end-M));
-var_M=rms_M^2;
+rms_M=std(data_ulod_M(M:end-M))
+var_M=rms_M^2
 
 
 figure
@@ -66,7 +67,7 @@ plot([0:length(data_ulod_M)-M*2]*Ts, (rms_calc_M+mean_M)*ones(1,length(data_ulod
 plot([0:length(data_ulod_M)-M*2]*Ts, (rms_M+mean_M)*ones(1,length(data_ulod_M)-M*2+1));
 plot([0:length(data_ulod_M)-M*2]*Ts, (mean_M)*ones(1,length(data_ulod_M)-M*2+1));
 
-% Step test for at se om det opfylder kravet.
+%% Step test for at se om det opfylder kravet.
 
 step_M=conv(h_M, ones(1, M));
 
@@ -75,12 +76,7 @@ plot([1:length(step_M)-M+1]*Ts,step_M(1:end-M+1)) % kravet er opfyldt.
 
 %% Eksponentielt midlingsfilter.
 
- % test værdier af alfa.
-
-
-y=filter([-0],[-1, 1], ones(1,M));
-figure
-plot(y)
+% test værdier af alfa.
 
 x=ones(1,M);
 figure
