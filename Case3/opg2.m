@@ -16,6 +16,27 @@ h100=ones(1,100)/100;
 data_ulod_10=conv(h10,data_ulod);
 data_ulod_50=conv(h50,data_ulod);
 data_ulod_100=conv(h100,data_ulod);
+% plot af histogram
+figure
+histfit(data_ulod)
+title('histogram uden filter')
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
+print(['foto/histogram_uden'],'-dpng')
+figure
+histfit(data_ulod_10(10:end-10))
+title('histogram 10 ordens')
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
+print(['foto/histogram_10'],'-dpng')
+figure
+histfit(data_ulod_50(50:end-50))
+title('histogram 50 ordens')
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
+print(['foto/histogram_50'],'-dpng')
+figure
+histfit(data_ulod_100(100:end-100))
+title('histogram 100 ordens')
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
+print(['foto/histogram_100'],'-dpng')
 
 %Plot af data med og uden filter.
 figure
