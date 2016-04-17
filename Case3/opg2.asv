@@ -29,7 +29,7 @@ xlabel('sekunder (s)')
 ylabel('bit')
 title('Plot af data med og uden filter.')
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
-print(['foto/med_uden_filter_10_50_100'],'-dpng')
+print(['foto/med_uden_filter_10_50_100' name],'-dpng')
 
 % måling af avg, rms og var. 
 avg_meas=[mean(data_ulod), mean(data_ulod_10(11:end-11)), mean(data_ulod_50(51:end-51)), mean(data_ulod_100(101:end-101))];
@@ -49,7 +49,7 @@ xlabel('Orden (M)')
 ylabel('varians')
 title('plot af varians')
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
-print(['foto/plot af varians'],'-dpng')
+print(['foto/plot af varians' name],'-dpng')
 
 
 %% Krav max indsvingningstid 100ms
@@ -83,7 +83,7 @@ xlabel('sekunder (s)')
 ylabel('bits')
 title('plot af målt og uregnet rms. og filtret data')
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
-print(['foto/100ms_rms_plot'],'-dpng')
+print(['foto/100ms_rms_plot' name],'-dpng')
 %% Step test for at se om det opfylder kravet.
 
 step_M=conv(h_M, ones(1, M));
@@ -93,7 +93,7 @@ plot([1:length(step_M)-M+1]*Ts,step_M(1:end-M+1)) % kravet er opfyldt.
 xlabel('sekunder (s)')
 title('plot af step af designet filter 100ms')
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
-print(['foto/100ms_step_plot'],'-dpng')
+print(['foto/100ms_step_plot' name],'-dpng')
 %% Eksponentielt midlingsfilter.
 
 % test værdier af alfa.
@@ -111,7 +111,7 @@ end
 xlabel('sekunder (s)')
 title('plot af eksponentielt midlingsfilter. (step)')
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
-print(['foto/eksponentielt midlingsfilter step'],'-dpng')
+print(['foto/eksponentielt midlingsfilter step' name],'-dpng')
 
 
 x=data;
@@ -128,7 +128,7 @@ ylabel('bits')
 xlabel('sekunder (s)')
 title('plot af eksponentielt midlingsfilter. (data)')
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
-print(['foto/eksponentielt midlingsfilter data'],'-dpng')
+print(['foto/eksponentielt midlingsfilter data' name],'-dpng')
  
 % udfra dette kan det ses at alfa nok skal være omkrin 0.2.
 
@@ -155,7 +155,7 @@ ylabel('bits')
 xlabel('sekunder (s)')
 title('plot af eksponentielt midlingsfilter og 100ordens midlingsfilter. (data)')
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
-print(['foto/eksponentielt midlingsfilter og 100 ordens data'],'-dpng')
+print(['foto/eksponentielt midlingsfilter og 100 ordens data' name],'-dpng')
 
 
 
@@ -165,7 +165,7 @@ print(['foto/eksponentielt midlingsfilter og 100 ordens data'],'-dpng')
 %% ekstra opgave håndtering af korrupt data. med median filter
 
 data_korrupt=data;
-% ødelægger 0.1% af data'et
+% ødelægger 0.1% af data'et1%
 for i=1:length(data_korrupt);
     
     if(rand >= 0.999)
@@ -173,16 +173,12 @@ for i=1:length(data_korrupt);
     end
 end
 
+
 figure
 hold on
 plot(data_korrupt)
 plot(filter(b,a,data_korrupt))
 ylim([1000,2500])
-ylabel('bits')
-xlabel('sekunder (s)')
-title('korrupt data uden median og med eksponentielt midlingsfilter')
-set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
-print(['foto/korrupt_uden'],'-dpng')
 
 y=medfilt1(data_korrupt, 3);
 figure
@@ -190,10 +186,5 @@ hold on
 plot(y)
 plot(filter(b,a,y))
 ylim([1000,2500])
-ylabel('bits')
-xlabel('sekunder (s)')
-title('korrupt data med median og eksponentielt midlingsfilter')
-set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
-print(['foto/korrupt'],'-dpng')
 
 eksempel=median([1 2 2 2 inf 1 1 1])
