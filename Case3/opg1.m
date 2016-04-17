@@ -23,11 +23,14 @@ var_ulod = Svar_ulod^2; %1043.1
 figure
 histfit(data_mlod)
 title('Histogram for data med lod');
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
+print('foto/histogram_mlod','-dpng')
 
 figure
 histfit(data_ulod)
 title('Histogram for data uden lod');
-
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
+print('foto/histogram_ulod','-dpng')
 % de er tilnærmelsesvist normalt fordelete. Da de næsten følger
 % normalfordelings kurven. 
 % og spredningen passer nogenlunde med hitogrammet.
@@ -44,6 +47,8 @@ subplot(212);
 semilogx([0:Nfft-1]*ts, 20*log10(abs(fft(data_mlod(1:Nfft)))));
 grid on
 title('FFT plot med lod');
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
+print('foto/effekt_fft_mlod','-dpng')
 
 %plots uden lod
 figure, subplot(211);
@@ -53,6 +58,8 @@ subplot(212);
 semilogx([0:Nfft-1]*ts, 20*log10(abs(fft(data_ulod(1:Nfft)))));
 grid on
 title('FFT plot uden lod');
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
+print('foto/effekt_fft_ulod','-dpng')
 
 figure
 spectrogram(data_mlod,hamming(50),0,5000,fs);
