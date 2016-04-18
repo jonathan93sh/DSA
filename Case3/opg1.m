@@ -31,9 +31,6 @@ histfit(data_ulod)
 title('Histogram for data uden lod');
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
 print('foto/histogram_ulod','-dpng')
-% de er tilnærmelsesvist normalt fordelete. Da de næsten følger
-% normalfordelings kurven. 
-% og spredningen passer nogenlunde med hitogrammet.
 
 %% Effekspektrumsstrøj
 Nfft=round(length(fft(data_mlod))/2);
@@ -68,11 +65,6 @@ set(gcf,'PaperUnits','inches','PaperPosition',[0 0 20 10])
 figure
 spectrogram(data_ulod,hamming(50),0,5000,fs);
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 20 10])
-
-%eftersom amplituden ikke varierer meget over frekvensspektrummet kan det
-%siges, at der er hvid støj, da hvid støj per definition er at:
-%Hvid støj dækker alle frekvenser lige kraftigt => der inden for det synlige
-%spektrum er der lige meget energi i en given båndbredde uanset hvor den båndbredde ligger.  
 
 %% bit værdi
 
