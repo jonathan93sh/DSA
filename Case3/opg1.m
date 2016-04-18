@@ -11,13 +11,13 @@ data_ulod = data(1500:2300);
 N = length(data_mlod);
 
 %% varians og standard afvigelse
-x_avg_mlod = mean(data_mlod); %1108.4
-Svar_mlod = std(data_mlod); % 24.9647
-var_mlod = Svar_mlod^2; %623.2354
+x_avg_mlod = mean(data_mlod);
+std_mlod = std(data_mlod);
+var_mlod = var(data_mlod);
 
-x_avg_ulod = mean(data_ulod); %1404.9
-Svar_ulod = std(data_ulod); %32.2977
-var_ulod = Svar_ulod^2; %1043.1
+x_avg_ulod = mean(data_ulod);
+std_ulod = std(data_ulod);
+var_ulod = var(data_ulod);
 
 %% Histogram plots
 figure
