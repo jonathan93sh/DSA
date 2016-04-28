@@ -30,4 +30,3 @@ src/Process_data.doj: ../../../../../../../../Analog\ Devices/CrossCore\ Embedde
 src/Process_data.doj: ../../../../../../../../Analog\ Devices/CrossCore\ Embedded\ Studio\ 2.1.0/Blackfin/include/sys/anomaly_macros_rtl.h
 src/Process_data.doj: ../../../../../../../../Analog\ Devices/CrossCore\ Embedded\ Studio\ 2.1.0/Blackfin/include/sysreg.h
 src/Process_data.doj: ../../../../../../../../Analog\ Devices/CrossCore\ Embedded\ Studio\ 2.1.0/Blackfin/include/sys/05000311.h
-src/Process_data.doj: ../src/blackfin_signal.h
