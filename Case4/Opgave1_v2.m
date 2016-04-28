@@ -6,8 +6,8 @@ clc
 %% indstillinger for Sonar
 
 fs=44100;
-M_down = 4;
-fs_down=fs/4
+M_down = 2;
+fs_down=fs/M_down
 v_sound=340;
 hukommelse=10000;
 signal_navn='3 lyde.mat';
@@ -15,12 +15,12 @@ signal_navn='3 lyde.mat';
 
 % bygger signal
 
-f0 = 3000;
-f1 = 1800;
+f0 = 10000;
+f1 = 5000;
 f2 = 1200;
-T_step=0.5;
+T_step=0.005;
 t=[0:fs*T_step]/fs;
-Signal = chirp(t,400,T_step,200).*hamming(length(t))';% + chirp(t,f1,T_step,f2);
+Signal = chirp(t,10000,T_step,5000).*blackman(length(t))';% + chirp(t,f1,T_step,f2);
 
 %Signal=[sin(fo*2*pi*t(1:round(end/4))).*blackman(length(t(1:round(end/4))))'  sin(f2*2*pi*t(1:round(end/2))).*blackman(length(t(1:round(end/2))))' sin(f1*2*pi*t(1:round(end/3))).*blackman(length(t(1:round(end/3))))']
 
@@ -28,7 +28,7 @@ Signal = chirp(t,400,T_step,200).*hamming(length(t))';% + chirp(t,f1,T_step,f2);
 
 
 figure
-spectrogram(Signal,256,200,256,fs,'yaxis')
+%spectrogram(Signal,256,200,256,fs,'yaxis')
 
 figure
 plot([0:length(Signal)-1]/fs,Signal)
