@@ -4,10 +4,10 @@ close all
 clc
 
 %% indstillinger for Sonar
-close all
-fs=48000;
-M_down = 4;
-fs_down=fs/4
+
+fs=44100;
+M_down = 2;
+fs_down=fs/M_down
 v_sound=340;
 hukommelse=10000;
 signal_navn='3 lyde.mat';
@@ -15,33 +15,17 @@ signal_navn='3 lyde.mat';
 
 % bygger signal
 
-f0 = 3000;
-f1 = 1800;
+f0 = 10000;
+f1 = 5000;
 f2 = 1200;
-T_step=0.01;
+T_step=0.005;
 t=[0:fs*T_step]/fs;
-<<<<<<< HEAD
-%Signal = chirp(t,1500,T_step,500).*(blackman(length(t)).^0.2)';% + chirp(t,f1,T_step,f2);
-
-
-
-%Signal = [zeros(1, M_down*10) ones(1, M_down) zeros(1, M_down*10) ones(1, M_down) zeros(1, M_down*5) -ones(1, M_down) zeros(1, M_down*7) ones(1, M_down) zeros(1, M_down*15) ones(1, M_down) zeros(1, M_down*2) -ones(1, M_down) zeros(1, M_down*12) ones(1, M_down) zeros(1, M_down*11) ones(1, M_down) zeros(1, M_down*5) -ones(1, M_down) zeros(1, M_down*2) ones(1, M_down) zeros(1, M_down*1) ones(1, M_down) zeros(1, M_down*15) -ones(1, M_down) zeros(1, M_down*1)]
-
-=======
-Signal = chirp(t,400,T_step,200).*hamming(length(t))';% + chirp(t,f1,T_step,f2);
->>>>>>> 6938b59a65961f1c5cf11f384828979a3fb440c1
+Signal = chirp(t,10000,T_step,5000).*blackman(length(t))';% + chirp(t,f1,T_step,f2);
 
 %Signal=[sin(fo*2*pi*t(1:round(end/4))).*blackman(length(t(1:round(end/4))))'  sin(f2*2*pi*t(1:round(end/2))).*blackman(length(t(1:round(end/2))))' sin(f1*2*pi*t(1:round(end/3))).*blackman(length(t(1:round(end/3))))']
 
+%Signal=[chirp(t(1:round(end/4)),f0,0.01/4,f0-500).*blackman(length(t(1:round(end/4))))' chirp(t(1:round(end/4)),f2,0.01/4,f2-500).*blackman(length(t(1:round(end/4))))' chirp(t(1:round(end/4)),f1,0.01/4,f1-500).*blackman(length(t(1:round(end/4))))']
 
-%T_step=0.02;
-%t=[0:fs*T_step]/fs;
-%
-% først signal % Signal=[chirp(t(1:round(end/4)),f0,0.01/4,f0-500).*blackman(length(t(1:round(end/4)))).^0.2' chirp(t(1:round(end/4)),f2,0.01/4,f2-500).*blackman(length(t(1:round(end/4)))).^0.2']; %chirp(t(1:round(end/4)),f1,0.01/4,f1-500).*blackman(length(t(1:round(end/4)))).^0.2']
-
-%Signal = chirp(t,1200,T_step,600).*blackman(length(t)).^0.2';
-
-Signal = ones(1, 5
 
 figure
 %spectrogram(Signal,256,200,256,fs,'yaxis')
@@ -104,9 +88,7 @@ save('falsk_eko.mat','falsk_eko');
 
 %% gøre data klar til blackfin.
 
-max_signal=max([abs(max(Signal_kendt)) abs(min(Signal_kendt))]);
-
-blackfin_data=int16((Signal_kendt/max_signal)*(2^(16-1)-1));
+blackfin_data=int16((y/2)*(2^(16-1)-1));
 plot([0:length(blackfin_data)-1]/fs_down,blackfin_data)
 soundsc(double(blackfin_data),fs_down)
 
@@ -129,7 +111,7 @@ fileID=fopen('AudioNotchFilter/src/blackfin_signal.h','w');
 fprintf(fileID, '#define M %d\n', length(blackfin_filter));
 fprintf(fileID, '#define M_SHIFT %d\n', shift_max);
 fprintf(fileID, '#define UP_M %d\n', M_down);
-fprintf(fileID, '#define UP_M_SHIFT %d\n', round(log2(M_down)));
+fprintf(fileID, '#define UP_M_SHIFT %d\n', round(log2(M_down));
 fprintf(fileID,'#define SIGNAL_SIZE %d\n',length(blackfin_data));
 
 fprintf(fileID,'short h[M] = {\n%d', blackfin_filter(1));
@@ -169,34 +151,29 @@ save('falsk_eko.mat','falsk_eko');
 
 
 %% Aflæser resultat fra blackfin
-close all
 load(signal_navn,'Signal_kendt');
 
-t=load('maale_data_signal_2_3m.dat');
+%t=load('falsk_eko.mat');
 
-%load('falsk_eko.mat');
-%t=falsk_eko;
+load('falsk_eko.mat');
+t=falsk_eko;
 
-sound(t-mean(t), fs_down);
-%pause(3);
-%sound(Signal_kendt, fs_down);
+sound(t, fs_down);
+pause(3);
+sound(Signal_kendt, fs_down);
 
 %sound(t(1:end)-mean(t),fs_down)
 figure
-plot([0:length(t)-1]/fs_down, t-mean(t));
+plot([0:length(t)-1]/fs_down, t);
 figure
 plot([0:length(Signal_kendt)-1]/fs_down,Signal_kendt);
 %spectrogram(t(2218:end)-mean(t(2218:end)),256,200,256,fs_down,'yaxis')
 [c, lags]=xcorr(t-mean(t),Signal_kendt);
 
-<<<<<<< HEAD
-[c, lags]=xcorr(t-mean(t),Signal_kendt);
-=======
 %[c, lags]=xcorr([zeros(1,length(Signal_kendt)), t(length(Signal_kendt)+1:end)]-mean(t(length(Signal_kendt):end)),Signal_kendt);
->>>>>>> 6938b59a65961f1c5cf11f384828979a3fb440c1
 figure
 plot((lags/fs_down)*v_sound/2,c)
-%%
+
 
 [c, lags]=xcorr(Signal_kendt-mean(Signal_kendt));
 figure
