@@ -10,7 +10,7 @@ unsigned char p_ = 0;
 short decimFilter(short x)
 {
 	// fir filter
-	int y = 0;
+	long y = 0;
 
 	x_[p_] = x;
 
@@ -40,7 +40,7 @@ short interpolFilter(short x)
 	}
 	p2_=(p2_+1)%UP_M;
 
-	return (short)(y>>2);
+	return (short)(y>>UP_M_SHIFT);
 }
 
 
@@ -72,7 +72,7 @@ void Process_Data(void)
 	// FlagAMode is changed by using pushbutton	SW4 on board..
 	switch (FlagAMode) {
 		case PASS_THROUGH : 
-			xn = (short) (iChannel0LeftIn >> 12); // Keeping 16 bits
+			xn = (short) (iChannel0LeftIn >> 16); // Keeping 16 bits
 
 			yn = decimFilter(xn);
 			/*
@@ -90,12 +90,11 @@ void Process_Data(void)
 			
 			
 		case IIR_FILTER_ACTIVE : // Button PF8 pressed
-			xn = (short) (iChannel0LeftIn >> 12); // Keeping 16 bits
+			xn = (short) (iChannel0LeftIn >> 16); // Keeping 16 bits
 
 			yn = decimFilter(xn);
 			if(data_point < DATA_SIZE)
 			{
-
 
 				if(point%UP_M==0)
 				{
@@ -103,12 +102,9 @@ void Process_Data(void)
 					data_point++;
 				}
 
-				if(data_point < SIGNAL_SIZE)
-				{
-					yn = interpolFilter(SIGNAL[data_point]);
-					iChannel0LeftOut = yn << 16; // Convert to 24 bits
-					iChannel0RightOut = yn << 16;
-				}
+				yn = interpolFilter(SIGNAL[(data_point < SIGNAL_SIZE ? data_point : (SIGNAL_SIZE-1))]);
+				iChannel0LeftOut = yn << 15; // Convert to 24 bits
+				iChannel0RightOut = yn << 15;
 
 				point++;
 			}
