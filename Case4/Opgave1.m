@@ -4,6 +4,7 @@ close all
 clc
 
 %% Signal generation og indstillinger for SONAR
+%%% NOTE – Det oprindelige signal indeholder 3 chirps i SIGNAL 1, men for at gøre det mere overskueligt, er der valgt kun at medtage 2 chirps i SIGNAL 1 og analyse dette.
 close all
 fs=48000;
 M_down = 4;
@@ -56,13 +57,16 @@ print(['foto/' str],'-dpng')
 
 sound(Signal, fs)
 
-% Minimum,maximum afstand samt tollerance for signalet
+%% Minimum,maximum afstand samt tollerance for signalet
 
 T_signal=length(Signal)/fs
 
 afstand_min=v_sound*T_signal/2
 
 afstand_max=v_sound*2500/((fs/M_down)*2)
+
+%For at snakke om tolerancen og dermed også hvor mange meter en sample svarer 
+%til så kan det udregnes fra lydens hastighed, og sample frekvensen:
 
 afstand_tol=v_sound/((fs/M_down)*2)
 
