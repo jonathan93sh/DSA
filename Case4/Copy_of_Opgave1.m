@@ -3,29 +3,35 @@ clear
 close all
 clc
 
-%% indstillinger for Sonar
+%% Signal generation og indstillinger for SONAR
 close all
 fs=48000;
 M_down = 4;
-fs_down=fs/4
+fs_down=fs/4;
 v_sound=340;
 hukommelse=10000;
 signal_navn='3 lyde.mat';
 
+% Signal generation
+%Vælg hvilken type af signal der vil benyttes, sig=1 => 2 frekvenssweep lige efter hinanden.
+%På test resultaterne ses signal 1 som "maale_data..."
+%sig = 2 => blot 1 frekvenssweep. På test resultaterne ses det som "maale_data_signal_2..."
 
-% bygger signal
+sig=1; 
 
-sig=1;
-
+%Valg af frekvenser, f0 = start frekvens for første sweep i signal 1, hvor
+%f1 er start frekvens for det andet sweep i signal 1. Begge frekvens sweep
+%slutter hhv. f0-500 og f1-500, dvs. ved 2500Hz og 700hz.
 f0 = 3000;
-f1 = 1800;
-f2 = 1200;
+f1 = 1200;
 
+%Chip1 = 3000-2500Hz, Chirp 2 = 1200-700Hz.
+%Hvis sig=2 => Chirp = 1200-600Hz.
 if(sig==1)
     T_step=0.02;
     t=[0:fs*T_step]/fs;
 
-    Signal=[chirp(t(1:round(end/4)),f0,0.01/4,f0-500).*blackman(length(t(1:round(end/4)))).^0.2' chirp(t(1:round(end/4)),f2,0.01/4,f2-500).*blackman(length(t(1:round(end/4)))).^0.2'];
+    Signal=[chirp(t(1:round(end/4)),f0,0.01/4,f0-500).*blackman(length(t(1:round(end/4)))).^0.2' chirp(t(1:round(end/4)),f1,0.01/4,f1-500).*blackman(length(t(1:round(end/4)))).^0.2'];
 
 elseif(sig==2)
     T_step=0.01;
@@ -34,16 +40,23 @@ elseif(sig==2)
     Signal = chirp(t,1200,T_step,600).*blackman(length(t)).^0.2';
 end
 
-
 figure
-%spectrogram(Signal,256,200,256,fs,'yaxis')
+spectrogram(Signal,hamming(256),200,256,fs,'yaxis');
+str = sprintf('Spectrogram af Signal %d',sig);
+title([str]);
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 20 10])
+print(['foto/' str],'-dpng')
 
 figure
 plot([0:length(Signal)-1]/fs,Signal)
+str = sprintf('Tidsdomæneplot af Signal %d',sig);
+title([str]);
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 10 10])
+print(['foto/' str],'-dpng')
 
 sound(Signal, fs)
 
-%% minimum og maximum afstand. tollerance
+% Minimum,maximum afstand samt tollerance for signalet
 
 T_signal=length(Signal)/fs
 
@@ -52,8 +65,6 @@ afstand_min=v_sound*T_signal/2
 afstand_max=v_sound*2500/((fs/M_down)*2)
 
 afstand_tol=v_sound/((fs/M_down)*2)
-
-
 
 %% design decimering- og interpolation-filter
 
