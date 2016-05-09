@@ -1,0 +1,15 @@
+function [ c, lags ] = xcorr5000( x1, x2 )
+%UNTITLED2 Summary of this function goes here
+%   Detailed explanation goes here
+
+c=zeros(1, (length(x1)*2) - 1);
+lags=[-(length(x1)+1):length(x1)-1];
+
+for i=1:length(c)
+
+    for
+    
+    c(i)=
+    
+end
+
