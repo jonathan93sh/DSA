@@ -1,48 +1,27 @@
 #include "Talkthrough.h"
-#include "blackfin_signal.h"
 
 // Modify and insert your notch filter here!!!!
 
+int x1_, x2_ = 0;
+int y1_, y2_ = 0;
 
-short x_[M];
-unsigned char p_ = 0;
+//int b[] = {(short)(1.9895f*(2^3)), 1};
+//short a[] = {(short)(1.9875f*(2^3)), (short)(0.9980f*(2^3))};
 
-short decimFilter(short x)
+short myVolume(short x)
 {
-	// fir filter
-	long y = 0;
 
-	x_[p_] = x;
+	//short y = x<<2 - 19895*x_[0] + x_[1] + 19875*y_[0] - 9980*y_[1];
+	int y = ((int)x<<14) + (-32595*x1_) + (x2_<<14) + (32269*y1_) + (-16058*y2_);
+	y2_ = y1_;
+	x2_ = x1_;
 
-	for(unsigned char i = 0;i < M; i++)
-	{
-		y+=(int)h[i]*(int)x_[(i+p_)%M];
-	}
-	p_=(p_+1)%M;
+	y1_ = y>>14;
 
+	x1_ = x;
 
-	return (short)(y>>M_SHIFT);
+	return (short)(y>>14);
 }
-
-short x2_[UP_M];
-unsigned char p2_ = 0;
-
-short interpolFilter(short x)
-{
-	// fir filter
-	int y = 0;
-
-	x2_[p2_] = x;
-
-	for(unsigned char i = 0;i < UP_M; i++)
-	{
-		y+=(int)x2_[i];
-	}
-	p2_=(p2_+1)%UP_M;
-
-	return (short)(y>>UP_M_SHIFT);
-}
-
 
 //--------------------------------------------------------------------------//
 // Function:	Process_Data()												//
@@ -56,13 +35,6 @@ short interpolFilter(short x)
 //				iChannel1RightOut, iChannel2LeftOut and	iChannel2RightOut	//
 //				respectively.												//
 //--------------------------------------------------------------------------//
-
-#define DATA_SIZE 2500
-
-short data[DATA_SIZE];
-unsigned int data_point = 0;
-unsigned int point = 0;
-
 void Process_Data(void)
 {
 	short xn, yn;
@@ -72,10 +44,7 @@ void Process_Data(void)
 	// FlagAMode is changed by using pushbutton	SW4 on board..
 	switch (FlagAMode) {
 		case PASS_THROUGH : 
-			xn = (short) (iChannel0LeftIn >> 16); // Keeping 16 bits
-
-			yn = decimFilter(xn);
-			/*
+		
 			iChannel0LeftOut = iChannel0LeftIn;
 			
  //			iChannel0RightOut = iChannel0RightIn;
@@ -83,33 +52,17 @@ void Process_Data(void)
 			
 			iChannel1LeftOut = iChannel1LeftIn;
 			iChannel1RightOut = iChannel1RightIn;
-			*/
-			data_point = 0;
-			point = 0;
 			break;
 			
 			
 		case IIR_FILTER_ACTIVE : // Button PF8 pressed
+	
 			xn = (short) (iChannel0LeftIn >> 16); // Keeping 16 bits
-
-			yn = decimFilter(xn);
-			if(data_point < DATA_SIZE)
-			{
-
-				if(point%UP_M==0)
-				{
-					data[data_point] = yn;
-					data_point++;
-				}
-
-				yn = interpolFilter(SIGNAL[(data_point < SIGNAL_SIZE ? data_point : (SIGNAL_SIZE-1))]);
-				iChannel0LeftOut = yn << 15; // Convert to 24 bits
-				iChannel0RightOut = yn << 15;
-
-				point++;
-			}
-
 			
+			yn = myVolume(xn);
+			
+			iChannel0LeftOut = yn << 16; // Convert to 24 bits
+			iChannel0RightOut = yn << 16;
 			break;
 	
 	}	// end switch
