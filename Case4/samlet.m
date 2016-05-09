@@ -167,7 +167,7 @@ plot([0:length(t)-1]/fs_down, t-mean(t));
 figure
 plot([0:length(Signal_kendt)-1]/fs_down,Signal_kendt);
 
-[c, lags]=xcorr(t'-mean(t),Signal_kendt);
+[c, lags]=xcorr5000(t'-mean(t),Signal_kendt);
 
 figure
 plot((lags/fs_down)*v_sound/2,c)
