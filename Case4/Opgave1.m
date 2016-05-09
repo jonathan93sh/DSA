@@ -4,6 +4,10 @@ close all
 clc
 
 %% Signal generation og indstillinger for SONAR
+<<<<<<< HEAD
+=======
+%%% NOTE – Det oprindelige signal indeholder 3 chirps i SIGNAL 1, men for at gøre det mere overskueligt, er der valgt kun at medtage 2 chirps i SIGNAL 1 og analyse dette.
+>>>>>>> 03ecc0713650dd24749dd0a702bccd6ffb1665fd
 close all
 fs=48000;
 M_down = 4;
