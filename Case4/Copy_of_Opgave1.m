@@ -10,14 +10,14 @@ M_down = 4;
 fs_down=fs/4;
 v_sound=340;
 hukommelse=10000;
-signal_navn='3 lyde.mat';
+signal_navn='Signal 2.mat';
 
 % Signal generation
 %Vælg hvilken type af signal der vil benyttes, sig=1 => 2 frekvenssweep lige efter hinanden.
 %På test resultaterne ses signal 1 som "maale_data..."
 %sig = 2 => blot 1 frekvenssweep. På test resultaterne ses det som "maale_data_signal_2..."
 
-sig=1; 
+sig=2; 
 
 %Valg af frekvenser, f0 = start frekvens for første sweep i signal 1, hvor
 %f1 er start frekvens for det andet sweep i signal 1. Begge frekvens sweep
