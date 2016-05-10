@@ -4,10 +4,9 @@ close all
 clc
 
 %% Signal generation og indstillinger for SONAR
-<<<<<<< HEAD
-=======
-%%% NOTE – Det oprindelige signal indeholder 3 chirps i SIGNAL 1, men for at gøre det mere overskueligt, er der valgt kun at medtage 2 chirps i SIGNAL 1 og analyse dette.
->>>>>>> 03ecc0713650dd24749dd0a702bccd6ffb1665fd
+
+% NOTE – Det oprindelige signal indeholder 3 chirps i SIGNAL 1, men for at gøre det mere overskueligt, er der valgt kun at medtage 2 chirps i SIGNAL 1 og analyse dette.
+
 close all
 fs=48000;
 M_down = 4;
@@ -197,13 +196,9 @@ plot([0:length(t)-1]/fs_down, t-mean(t));
 figure
 plot([0:length(Signal_kendt)-1]/fs_down,Signal_kendt);
 %spectrogram(t(2218:end)-mean(t(2218:end)),256,200,256,fs_down,'yaxis')
+
 [c, lags]=xcorr(t-mean(t),Signal_kendt);
 
-<<<<<<< HEAD
-[c, lags]=xcorr(t-mean(t),Signal_kendt);
-=======
-%[c, lags]=xcorr([zeros(1,length(Signal_kendt)), t(length(Signal_kendt)+1:end)]-mean(t(length(Signal_kendt):end)),Signal_kendt);
->>>>>>> 6938b59a65961f1c5cf11f384828979a3fb440c1
 figure
 plot((lags/fs_down)*v_sound/2,c)
 %%

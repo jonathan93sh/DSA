@@ -10,22 +10,17 @@ M_down = 4;
 fs_down=fs/4;
 v_sound=340;
 hukommelse=10000;
-<<<<<<< HEAD
+
 signal_navn='Signal 2.mat';
-=======
-signal_navn='3 lyde.mat';
->>>>>>> 03ecc0713650dd24749dd0a702bccd6ffb1665fd
+
 
 % Signal generation
 %Vælg hvilken type af signal der vil benyttes, sig=1 => 2 frekvenssweep lige efter hinanden.
 %På test resultaterne ses signal 1 som "maale_data..."
 %sig = 2 => blot 1 frekvenssweep. På test resultaterne ses det som "maale_data_signal_2..."
 
-<<<<<<< HEAD
 sig=2; 
-=======
-sig=1; 
->>>>>>> 03ecc0713650dd24749dd0a702bccd6ffb1665fd
+
 
 %Valg af frekvenser, f0 = start frekvens for første sweep i signal 1, hvor
 %f1 er start frekvens for det andet sweep i signal 1. Begge frekvens sweep
@@ -200,7 +195,6 @@ plot([0:length(Signal_kendt)-1]/fs_down,Signal_kendt);
 %spectrogram(t(2218:end)-mean(t(2218:end)),256,200,256,fs_down,'yaxis')
 [c, lags]=xcorr(t-mean(t),Signal_kendt);
 
-[c, lags]=xcorr(t-mean(t),Signal_kendt);
 figure
 plot((lags/fs_down)*v_sound/2,c)
 %%
